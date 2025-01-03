@@ -3,10 +3,11 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon index.js",
-    "start": "node index.js",
-    "build": "echo 'No build step required'"
-  },
+  "dev": "nodemon index.js",
+  "start": "node index.js",
+  "build": "echo 'No build step required'",
+  "postinstall": "npm rebuild bcrypt --build-from-source"
+},
   "keywords": [],
   "author": "",
   "license": "ISC",
