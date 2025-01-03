@@ -1,0 +1,360 @@
+.formBuilderContainer {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    font-family: sans-serif;
+  }
+  
+  /* Light/Dark background classes */
+  .light {
+    background-color: #f5f5f5;
+    color: #333;
+  }
+  .dark {
+    background-color: #1a1a1a;
+    color: #fff;
+  }
+  
+  /* --- Top Bar (same as before) --- */
+  .topBar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 1rem;
+    background-color: #2c2c2c; /* or #333 if you prefer */
+  }
+  .formNameInput {
+    width: 250px;
+    padding: 0.4rem;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+  }
+  
+  /* Tabs (Flow / Response) */
+  .tabContainer {
+    display: flex;
+    gap: 1rem;
+  }
+  .tabButton {
+    background: transparent;
+    border: none;
+    color: #ccc;
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+  }
+  .tabButton:hover {
+    background-color: #444;
+    color: #fff;
+  }
+  .activeTab {
+    background-color: #555;
+    color: #fff !important;
+  }
+  
+  /* Top bar actions (toggle, share, save, close) */
+  .topBarActions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .shareButton,
+  .saveButton,
+  .closeButton {
+    background-color: #444;
+    border: none;
+    color: #fff;
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .shareButton:hover,
+  .saveButton:hover,
+  .closeButton:hover {
+    background-color: #666;
+  }
+  
+  /* Light/Dark Toggle */
+  .toggleWrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.2rem;
+    margin-right: 1rem;
+  }
+  .modeLabel {
+    font-size: 0.8rem;
+    color: #ccc;
+  }
+  .toggleButton {
+    width: 45px;
+    height: 20px;
+    background-color: #666;
+    border-radius: 10px;
+    position: relative;
+    cursor: pointer;
+  }
+  .toggleCircle {
+    width: 18px;
+    height: 18px;
+    background: #eee;
+    border-radius: 50%;
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    transition: all 0.3s ease;
+  }
+  .toggleButton.active {
+    background-color: #222;
+  }
+  .toggleButton.active .toggleCircle {
+    background-color: #fff;
+    transform: translateX(24px);
+  }
+  
+  /* --- Main Content --- */
+  .mainContent {
+    display: flex;
+    flex: 1;
+  }
+  
+  /* --- Left Sidebar --- */
+  .leftSidebar {
+    width: 250px;
+    background-color: #1e1e1e;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+  }
+  .sidebarHeading {
+    color: #ffa500;
+    font-size: 0.9rem;
+    margin-bottom: 0.6rem;
+    text-transform: uppercase; /* optional, if you want uppercase headings */
+  }
+  
+  /* 
+     .sidebarGroup creates a 2-column grid for the items. 
+     Adjust 'grid-gap' as needed to match your design.
+  */
+  .sidebarGroup {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 0.5rem;
+    margin-bottom: 1.2rem; /* space after each group */
+  }
+  
+  .sidebarItem {
+    background-color: #2e2e2e;
+    color: #ccc;
+    border: none;
+    padding: 0.4rem 0.6rem;
+    text-align: left;
+    cursor: pointer;
+    border-radius: 4px;
+    display: flex;         /* for icon + text alignment */
+    align-items: center;
+    gap: 0.4rem;           /* space between icon and text */
+    justify-content: flex-start;
+  }
+  .sidebarItem:hover {
+    background-color: #3e3e3e;
+    color: #fff;
+  }
+  
+  /* An optional class for the icon itself */
+  .itemIcon {
+    /* If you want to style the icon color, size, etc. */
+    font-size: 1rem;
+    line-height: 1;
+  }
+  
+  /* --- Editor Area --- */
+  .editorArea {
+    flex: 1;
+    padding: 1rem;
+    position: relative;
+    overflow-y: auto;
+  }
+  
+  /* Flow Editor */
+  .flowEditor {
+    position: relative;
+    height: 100%;
+  }
+  .flowStartBubble {
+    width: 100px;
+    background-color: #333;
+    padding: 0.5rem;
+    border-radius: 8px;
+    color: #fff;
+    text-align: center;
+    cursor: pointer;
+    margin: 1rem 0;
+  }
+  
+  /* Response View */
+  .responseView {
+    padding: 1rem;
+  }
+
+  /* Input wrapper with flag */
+.inputWrapper {
+    display: flex;
+    align-items: center;
+    position: relative;
+    background-color: #2e2e2e; /* Dark background matching form design */
+    border-radius: 8px;
+    padding: 0.5rem;
+    margin: 0.5rem 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Flag icon on the left */
+  .flagIcon {
+    font-size: 1rem;
+    color: #fff; /* Flag color */
+    background-color: #1a1a1a; /* Matches the input box */
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0.5rem;
+  }
+  
+  /* Input box styling */
+  .inputBox {
+    flex: 1;
+    border: none;
+    background-color: transparent;
+    color: #fff;
+    font-size: 1rem;
+    outline: none;
+    padding: 0.5rem;
+    border-radius: 4px;
+  }
+  
+  /* Placeholder color */
+  .inputBox::placeholder {
+    color: #aaa; /* Light gray for placeholder */
+  }
+  
+  /* Flow item label styling (like "Start", "Input Text 1", etc.) */
+  .flowItemLabel {
+    font-size: 1rem;
+    color: #fff;
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Flow item hint */
+  .hint {
+    font-size: 0.9rem;
+    color: #ccc;
+    margin-top: 0.2rem;
+  }
+
+  .responsesContainer {
+    padding: 1.5rem;
+    font-family: Arial, sans-serif;
+    color: #fff;
+    background-color: #1a1a1a;
+    height: 100vh;
+    overflow-y: auto;
+  }
+  
+  /* Metrics Section */
+  .metricsContainer {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 1.5rem;
+  }
+  
+  .metricCard {
+    background-color: #2c2c2c;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  }
+  
+  .metricCard h2 {
+    font-size: 2rem;
+    margin: 0;
+    color: #4caf50;
+  }
+  
+  .metricCard p {
+    margin: 0.5rem 0 0;
+    font-size: 1rem;
+    color: #ccc;
+  }
+  
+  /* Response Table */
+  .tableContainer {
+    margin-bottom: 2rem;
+    overflow-x: auto;
+  }
+  
+  .responseTable {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .responseTable th,
+  .responseTable td {
+    text-align: left;
+    padding: 0.8rem;
+    border: 1px solid #444;
+  }
+  
+  .responseTable th {
+    background-color: #333;
+    color: #fff;
+    font-weight: bold;
+  }
+  
+  .responseTable tr:nth-child(even) {
+    background-color: #2e2e2e;
+  }
+  
+  .responseTable td {
+    color: #ccc;
+  }
+  
+  .noResponses {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #aaa;
+    margin: 2rem 0;
+  }
+  
+  /* Chart Section */
+  .chartContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 300px;
+  }
+  
+  .chartLabel {
+    text-align: center;
+    margin-top: 1rem;
+  }
+  
+  .chartLabel h2 {
+    font-size: 1.5rem;
+    margin: 0;
+    color: #4caf50;
+  }
+  
+  .chartLabel p {
+    font-size: 1rem;
+    color: #ccc;
+  }
+  
+  
+  

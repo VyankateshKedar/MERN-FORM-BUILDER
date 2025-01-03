@@ -1,0 +1,76 @@
+.container {
+    padding: 2rem;
+    background-color: #1a1a2e;
+    color: #fff;
+    min-height: 100vh;
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+  
+  .header h2 {
+    font-size: 2rem;
+    color: #4e86f7;
+  }
+  
+  .main {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  
+  .addCardSection {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .input {
+    flex: 1;
+    padding: 0.5rem;
+    border: 1px solid #4e86f7;
+    border-radius: 5px;
+    background-color: #2a2a3d;
+    color: #fff;
+  }
+  
+  .addCardButton {
+    background-color: #4e86f7;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .addCardButton:hover {
+    background-color: #3b6bc1;
+  }
+  
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+  
+  .card {
+    background-color: #2a2a3d;
+    padding: 1rem;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .cardIcon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .card p {
+    font-size: 1rem;
+    color: #fff;
+  }
+  
