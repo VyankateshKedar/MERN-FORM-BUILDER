@@ -18,7 +18,7 @@ const app = express();
 
 // Configure CORS
 const corsOptions = {
-  origin: process.env.REACT_APP_ORIGIN || "https://mern-form-builder.vercel.app/", // Frontend URL
+  origin: "https://mern-form-builder.vercel.app/", // Frontend URL
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true,
 };
