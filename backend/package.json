@@ -3,24 +3,28 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-  "dev": "nodemon index.js",
-  "start": "node index.js",
-  "build": "echo 'No build step required'",
-  "postinstall": "npm rebuild bcrypt --build-from-source"
-},
+    "dev": "nodemon index.js",
+    "start": "node index.js",
+    "build": "echo 'No build step required'",
+    "postinstall": "npm rebuild bcrypt --build-from-source"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
+  "description": "A backend for Form Builder using Express, Mongoose, and JWT",
   "dependencies": {
-    "bcrypt": "^5.1.1",
+    "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.9.2"
+    "mongoose": "^8.9.2",
+    "uuid": "^11.0.3"
   },
   "devDependencies": {
     "nodemon": "^3.1.9"
+  },
+  "engines": {
+    "node": ">=16.x"
   }
 }

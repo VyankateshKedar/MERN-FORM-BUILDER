@@ -1,12 +1,13 @@
 // backend/routes/formRoutes.js
 const express = require('express');
-const router = express.Router();
+const { v4: uuidv4 } = require('uuid'); // For generating unique share links
 const Form = require('../models/Form');
 const Folder = require('../models/Folder');
 const Response = require('../models/Response');
 const User = require('../models/User');
 const authMiddleware = require('../middlewares/authMiddleware');
-const { v4: uuidv4 } = require('uuid'); // For generating unique share links
+
+const router = express.Router();
 
 // Create a new form within a folder
 router.post('/', authMiddleware, async (req, res) => {
@@ -24,7 +25,7 @@ router.post('/', authMiddleware, async (req, res) => {
     }
 
     const newForm = new Form({
-      name,
+      name: name.trim(),
       folder: folderId,
       user: req.user.id,
       elements: elements || [],
@@ -53,7 +54,7 @@ router.put('/:formId', authMiddleware, async (req, res) => {
     }
 
     // Update the form fields
-    if (name) form.name = name;
+    if (name) form.name = name.trim();
     if (elements) form.elements = elements;
 
     await form.save();
@@ -86,7 +87,7 @@ router.post('/:formId/share', authMiddleware, async (req, res) => {
     }
 
     // Find the user to share with
-    const sharedUser = await User.findOne({ email });
+    const sharedUser = await User.findOne({ email: email.trim().toLowerCase() });
     if (!sharedUser) {
       return res.status(400).json({ message: 'User with this email does not exist.' });
     }
@@ -165,37 +166,6 @@ router.post('/share/:shareLink/response', async (req, res) => {
   } catch (error) {
     console.error('Submit Response Error:', error);
     res.status(500).json({ message: 'Server error submitting response.', error: error.message });
-  }
-});
-
-// Get form details
-router.get('/:formId', authMiddleware, async (req, res) => {
-  try {
-    const { formId } = req.params;
-
-    // Find the form and ensure it belongs to the user or is shared with the user
-    const form = await Form.findOne({ _id: formId })
-      .populate('sharedWith.user', 'email name')
-      .exec();
-
-    if (!form) {
-      return res.status(404).json({ message: 'Form not found.' });
-    }
-
-    // Check ownership or shared access
-    if (form.user.toString() !== req.user.id) {
-      const isShared = form.sharedWith.some(
-        (shared) => shared.user._id.toString() === req.user.id
-      );
-      if (!isShared) {
-        return res.status(403).json({ message: 'Access denied to this form.' });
-      }
-    }
-
-    res.status(200).json(form);
-  } catch (error) {
-    console.error('Get Form Error:', error);
-    res.status(500).json({ message: 'Server error fetching form.', error: error.message });
   }
 });
 

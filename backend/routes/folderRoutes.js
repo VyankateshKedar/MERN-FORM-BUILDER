@@ -1,28 +1,28 @@
 // backend/routes/folderRoutes.js
-
 const express = require('express');
 const router = express.Router();
 const Folder = require('../models/Folder');
-const User = require('../models/User'); // We'll need this to find user by email
+const User = require('../models/User');
 const authMiddleware = require('../middlewares/authMiddleware');
 
 // POST - Create a new folder
 router.post('/', authMiddleware, async (req, res) => {
   try {
     const { name } = req.body;
-    if (!name) {
+
+    if (!name || name.trim() === '') {
       return res.status(400).json({ message: 'Folder name is required.' });
     }
 
-    // Check if a folder with the same name already exists for this user
-    const existingFolder = await Folder.findOne({ name, user: req.user.id });
+    // Check if a folder with the same name already exists for the user
+    const existingFolder = await Folder.findOne({ name: name.trim(), user: req.user.id });
     if (existingFolder) {
       return res.status(400).json({ message: 'Folder name already exists.' });
     }
 
-    // Create new folder
+    // Create the new folder
     const newFolder = new Folder({
-      name,
+      name: name.trim(),
       user: req.user.id,
     });
 
@@ -56,16 +56,16 @@ router.delete('/:folderId', authMiddleware, async (req, res) => {
   try {
     const { folderId } = req.params;
 
-    // Find the folder by ID and user
+    // Find the folder by ID and ensure it belongs to the user
     const folder = await Folder.findOne({ _id: folderId, user: req.user.id });
     if (!folder) {
-      return res
-        .status(404)
-        .json({ message: 'Folder not found or not owned by this user.' });
+      return res.status(404).json({
+        message: 'Folder not found or not owned by this user.',
+      });
     }
 
     await folder.deleteOne();
-    return res.json({ message: 'Folder deleted successfully' });
+    return res.status(200).json({ message: 'Folder deleted successfully' });
   } catch (error) {
     console.error('Delete Folder Error:', error);
     return res.status(500).json({
@@ -75,32 +75,35 @@ router.delete('/:folderId', authMiddleware, async (req, res) => {
   }
 });
 
-/**
- * POST - Invite/Share folder with another user.
- * Body expects: { email, permission }, e.g. { "email": "test@example.com", "permission": "edit" }
- */
+// POST - Share a folder with another user
 router.post('/:folderId/share', authMiddleware, async (req, res) => {
   try {
     const { folderId } = req.params;
-    const { email, permission } = req.body; // "view" or "edit"
+    const { email, permission } = req.body;
 
-    // 1) Check if the folder belongs to current user
+    if (!email || !permission) {
+      return res.status(400).json({
+        message: 'Email and permission are required.',
+      });
+    }
+
+    // 1) Ensure the folder belongs to the current user
     const folder = await Folder.findOne({ _id: folderId, user: req.user.id });
     if (!folder) {
-      return res
-        .status(404)
-        .json({ message: 'Folder not found or not owned by this user.' });
+      return res.status(404).json({
+        message: 'Folder not found or not owned by this user.',
+      });
     }
 
     // 2) Find the user by email
-    const invitedUser = await User.findOne({ email });
+    const invitedUser = await User.findOne({ email: email.trim().toLowerCase() });
     if (!invitedUser) {
       return res.status(400).json({
         message: 'User with this email does not exist or is not registered.',
       });
     }
 
-    // 3) Check if the user is already in sharedWith
+    // 3) Check if the user is already in the sharedWith array
     const alreadyShared = folder.sharedWith.some(
       (item) => item.user.toString() === invitedUser._id.toString()
     );
@@ -110,16 +113,14 @@ router.post('/:folderId/share', authMiddleware, async (req, res) => {
       });
     }
 
-    // 4) Add to folder.sharedWith
+    // 4) Add the user to sharedWith
     folder.sharedWith.push({
       user: invitedUser._id,
-      permission: permission === 'edit' ? 'edit' : 'view', // default to 'view'
+      permission: ['edit', 'view'].includes(permission) ? permission : 'view',
     });
 
     await folder.save();
 
-    // Optionally generate a share link or return updated folder
-    // For demonstration, let's just return a success message
     return res.status(200).json({
       message: `Folder shared with ${email} successfully.`,
       folder,
