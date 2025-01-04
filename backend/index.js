@@ -1,4 +1,3 @@
-// backend/index.js
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
@@ -17,8 +16,15 @@ dotenv.config();
 // Initialize Express app
 const app = express();
 
+// Configure CORS
+const corsOptions = {
+  origin: process.env.REACT_APP_ORIGIN || "https://mern-form-builder.vercel.app/", // Frontend URL
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true,
+};
+app.use(cors(corsOptions));
+
 // Middleware
-app.use(cors());
 app.use(express.json());
 
 // Connect to MongoDB
@@ -45,14 +51,17 @@ app.use('/api/submissions', submissionRoutes);
 app.use('/api/users', userRoutes);
 
 // Catch-all route for unmatched endpoints
-app.use((req, res, next) => {
+app.use((req, res) => {
   res.status(404).json({ error: 'Endpoint not found' });
 });
 
-// Error handling middleware
+// Enhanced error handling middleware
 app.use((err, req, res, next) => {
-  console.error('Error:', err.message);
-  res.status(err.status || 500).json({ error: err.message || 'An unexpected error occurred!' });
+  console.error(`[Error] ${err.message}`);
+  res.status(err.status || 500).json({
+    success: false,
+    message: err.message || 'An unexpected error occurred!',
+  });
 });
 
 // Start server
@@ -63,7 +72,7 @@ const server = app.listen(PORT, () => {
 
 // Handle unhandled promise rejections
 process.on('unhandledRejection', (reason, promise) => {
-  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+  console.error('[Unhandled Rejection]', reason);
   server.close(() => {
     process.exit(1); // Exit after closing the server
   });
@@ -72,6 +81,15 @@ process.on('unhandledRejection', (reason, promise) => {
 // Graceful shutdown
 process.on('SIGTERM', () => {
   console.log('SIGTERM signal received. Shutting down gracefully...');
+  server.close(() => {
+    console.log('Server shut down successfully.');
+    process.exit(0);
+  });
+});
+
+// Graceful handling of SIGINT (Ctrl+C)
+process.on('SIGINT', () => {
+  console.log('SIGINT signal received. Shutting down gracefully...');
   server.close(() => {
     console.log('Server shut down successfully.');
     process.exit(0);
